@@ -15,7 +15,7 @@ They are combined into **4 selectable or cycling 12-flower bouquets**, each tied
 </p>
 
 <p align="center">
-  <img src="previews/bouquet_1.png" alt="Classic Trio still: 4 light green tulips, 4 pink lilies, 4 white roses" width="640">
+  <img src="some_previews/bouquet_1.png" alt="Classic Trio still: 4 light green tulips, 4 pink lilies, 4 white roses" width="640">
 </p>
 
 Spin speed (`0.6 rad/s`), camera distance (`4.0`), tilt (`0.30 rad`), shading ramps, paper wrap, baby's breath, sparkles, and floating hearts are unchanged from the original repository.
@@ -86,6 +86,12 @@ Each arrangement has **12 flowers**. Pick one with `--bouquet 1..4`, or cycle th
 </p>
 
 The layouts and render engine live in `bouquets.py` and `engine.py`. `bouquet3d.py` is the main CLI.
+
+## View in a browser
+
+Open `index.html` locally to view the bouquet gallery. It uses the preview images in `some_previews/` and needs no build step.
+
+To deploy it on Vercel, import this repository and deploy it as a static site using the repository root. No framework or build command is required.
 
 ## Run it
 

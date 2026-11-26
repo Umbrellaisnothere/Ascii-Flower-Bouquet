@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Explore four colorful 3D ASCII flower bouquets."
+    >
+    <title>Flower Bouquets</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+        background: #101714;
+        color: #f3f5ef;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        background:
+          radial-gradient(ellipse at 50% 20%, #263c31 0, transparent 55%),
+          #101714;
+      }
+
+      main {
+        width: min(100% - 2rem, 980px);
+        margin: 0 auto;
+        padding: clamp(2.5rem, 8vw, 6rem) 0 3rem;
+        text-align: center;
+      }
+
+      .eyebrow {
+        color: #a9d8b2;
+        font-size: 0.78rem;
+        font-weight: 700;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      h1 {
+        margin: 0.6rem 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.5rem, 8vw, 5rem);
+        font-weight: 500;
+        letter-spacing: -0.045em;
+      }
+
+      .intro {
+        max-width: 38rem;
+        margin: 0 auto;
+        color: #c2cec3;
+        line-height: 1.7;
+      }
+
+      .bouquet-card {
+        margin: 2rem auto 1.5rem;
+        overflow: hidden;
+        border: 1px solid #ffffff20;
+        border-radius: 1.5rem;
+        background: #080d0bd9;
+        box-shadow: 0 2rem 6rem #0008;
+      }
+
+      .image-frame {
+        display: grid;
+        min-height: 260px;
+        place-items: center;
+        background:
+          radial-gradient(ellipse at center, #294334 0, #101714 72%);
+      }
+
+      .image-frame img {
+        display: block;
+        width: min(100%, 760px);
+        height: auto;
+        max-height: min(70vh, 680px);
+        object-fit: contain;
+      }
+
+      .card-caption {
+        padding: 1rem 1.25rem 1.35rem;
+      }
+
+      h2 {
+        margin: 0;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.5rem, 5vw, 2.2rem);
+        font-weight: 500;
+      }
+
+      .mix {
+        margin: 0.5rem 0 0;
+        color: #b7c5b9;
+      }
+
+      .bouquet-picker {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.65rem;
+        margin: 1.25rem 0;
+      }
+
+      button {
+        min-height: 2.75rem;
+        padding: 0.65rem 1rem;
+        border: 1px solid #829d87;
+        border-radius: 999px;
+        background: #18251d;
+        color: #f3f5ef;
+        font: inherit;
+        cursor: pointer;
+      }
+
+      button:hover,
+      button[aria-pressed="true"] {
+        border-color: #b4e2bc;
+        background: #294334;
+      }
+
+      button:focus-visible {
+        outline: 3px solid #f1c979;
+        outline-offset: 3px;
+      }
+
+      .cycle-button {
+        margin-top: 0.35rem;
+        border-color: #e1bd79;
+        background: #352c1c;
+      }
+
+      .cycle-button:hover,
+      .cycle-button[aria-pressed="true"] {
+        background: #514124;
+      }
+
+      footer {
+        margin-top: 2.5rem;
+        color: #9baa9d;
+        font-size: 0.9rem;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">A little garden in pixels</p>
+      <h1>Flower Bouquets</h1>
+      <p class="intro">
+        Four arrangements of tulips, lilies, and roses, tied with a blue ribbon.
+        Choose a bouquet or let the gallery cycle through them.
+      </p>
+
+      <section class="bouquet-card" aria-labelledby="bouquet-name">
+        <div class="image-frame">
+          <img
+            id="bouquet-image"
+            src="some_previews/bouquet_spin.gif"
+            alt="Classic Trio bouquet slowly spinning"
+          >
+        </div>
+        <div class="card-caption" aria-live="polite">
+          <h2 id="bouquet-name">Classic Trio</h2>
+          <p class="mix" id="bouquet-mix">
+            4 light green tulips · 4 pink lilies · 4 white roses
+          </p>
+        </div>
+      </section>
+
+      <nav class="bouquet-picker" aria-label="Choose a bouquet">
+        <button type="button" data-bouquet="0" aria-pressed="true">Classic Trio</button>
+        <button type="button" data-bouquet="1" aria-pressed="false">Spring Meadow</button>
+        <button type="button" data-bouquet="2" aria-pressed="false">Blush &amp; Ivory</button>
+        <button type="button" data-bouquet="3" aria-pressed="false">Ivory Garden</button>
+      </nav>
+      <button class="cycle-button" id="cycle-button" type="button" aria-pressed="false">
+        Start cycling
+      </button>
+
+      <footer>Made to brighten your day <span aria-hidden="true">♥</span></footer>
+    </main>
+
+    <script>
+      const bouquets = [
+        {
+          name: "Classic Trio",
+          mix: "4 light green tulips · 4 pink lilies · 4 white roses",
+          image: "some_previews/bouquet_spin.gif",
+          alt: "Classic Trio bouquet slowly spinning",
+        },
+        {
+          name: "Spring Meadow",
+          mix: "6 light green tulips · 3 pink lilies · 3 white roses",
+          image: "some_previews/bouquet_2.png",
+          alt: "Spring Meadow bouquet with tulips, lilies, and roses",
+        },
+        {
+          name: "Blush & Ivory",
+          mix: "2 light green tulips · 6 pink lilies · 4 white roses",
+          image: "some_previews/bouquet_3.png",
+          alt: "Blush and Ivory bouquet with pink lilies and white roses",
+        },
+        {
+          name: "Ivory Garden",
+          mix: "3 light green tulips · 3 pink lilies · 6 white roses",
+          image: "some_previews/bouquet_4.png",
+          alt: "Ivory Garden bouquet with white roses, tulips, and lilies",
+        },
+      ];
+
+      const image = document.querySelector("#bouquet-image");
+      const name = document.querySelector("#bouquet-name");
+      const mix = document.querySelector("#bouquet-mix");
+      const buttons = [...document.querySelectorAll("[data-bouquet]")];
+      const cycleButton = document.querySelector("#cycle-button");
+      let selected = 0;
+      let cycleTimer;
+
+      function selectBouquet(index) {
+        selected = index;
+        const bouquet = bouquets[index];
+        image.src = bouquet.image;
+        image.alt = bouquet.alt;
+        name.textContent = bouquet.name;
+        mix.textContent = bouquet.mix;
+        buttons.forEach((button, buttonIndex) => {
+          button.setAttribute("aria-pressed", String(buttonIndex === index));
+        });
+      }
+
+      function stopCycling() {
+        window.clearInterval(cycleTimer);
+        cycleTimer = undefined;
+        cycleButton.setAttribute("aria-pressed", "false");
+        cycleButton.textContent = "Start cycling";
+      }
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          stopCycling();
+          selectBouquet(Number(button.dataset.bouquet));
+        });
+      });
+
+      cycleButton.addEventListener("click", () => {
+        if (cycleTimer) {
+          stopCycling();
+          return;
+        }
+
+        cycleButton.setAttribute("aria-pressed", "true");
+        cycleButton.textContent = "Stop cycling";
+        cycleTimer = window.setInterval(() => {
+          selectBouquet((selected + 1) % bouquets.length);
+        }, 5000);
+      });
+    </script>
+  </body>
+</html>
