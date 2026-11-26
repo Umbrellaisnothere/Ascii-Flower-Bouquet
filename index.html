@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta
       name="description"
       content="Explore four colorful 3D ASCII flower bouquets."
@@ -78,10 +78,87 @@
 
       .image-frame img {
         display: block;
-        width: min(100%, 760px);
+        width: 100%;
         height: auto;
         max-height: min(70vh, 680px);
         object-fit: contain;
+      }
+
+      .image-frame picture {
+        display: block;
+        width: min(100%, 760px);
+      }
+
+      .preview-trigger {
+        display: block;
+        width: 100%;
+        min-height: 260px;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+      }
+
+      button.preview-trigger:hover {
+        border-color: transparent;
+        background: transparent;
+      }
+
+      .preview-dialog {
+        position: relative;
+        width: 96vw;
+        max-width: 1400px;
+        width: min(96vw, 1400px);
+        height: 96vh;
+        max-height: 1000px;
+        height: min(96vh, 1000px);
+        height: min(96dvh, 1000px);
+        padding: 3.75rem 1rem 1rem;
+        padding:
+          max(3.75rem, env(safe-area-inset-top))
+          max(1rem, env(safe-area-inset-right))
+          max(1rem, env(safe-area-inset-bottom))
+          max(1rem, env(safe-area-inset-left));
+        overflow: hidden;
+        border: 1px solid #ffffff30;
+        border-radius: 1rem;
+        background: #080d0b;
+        color: #f3f5ef;
+      }
+
+      .preview-dialog picture {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .preview-dialog::backdrop {
+        background: #050807e8;
+      }
+
+      .preview-dialog img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+
+      .close-preview {
+        position: absolute;
+        top: 0.65rem;
+        right: 0.65rem;
+        top: max(0.65rem, env(safe-area-inset-top));
+        right: max(0.65rem, env(safe-area-inset-right));
+        z-index: 1;
+        display: grid;
+        width: 2.75rem;
+        min-height: 2.75rem;
+        padding: 0;
+        place-items: center;
+        border-color: #ffffff55;
+        background: #18251deF;
+        font-size: 1.6rem;
+        line-height: 1;
       }
 
       .card-caption {
@@ -130,8 +207,15 @@
         outline-offset: 3px;
       }
 
-      .cycle-button {
+      .gallery-controls {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.65rem;
         margin-top: 0.35rem;
+      }
+
+      .cycle-button {
         border-color: #e1bd79;
         background: #352c1c;
       }
@@ -139,6 +223,10 @@
       .cycle-button:hover,
       .cycle-button[aria-pressed="true"] {
         background: #514124;
+      }
+
+      .animation-button {
+        border-color: #829d87;
       }
 
       footer {
@@ -159,11 +247,25 @@
 
       <section class="bouquet-card" aria-labelledby="bouquet-name">
         <div class="image-frame">
-          <img
-            id="bouquet-image"
-            src="some_previews/bouquet_spin.gif"
-            alt="Classic Trio bouquet slowly spinning"
+          <button
+            class="preview-trigger"
+            id="preview-trigger"
+            type="button"
+            aria-label="Open Classic Trio in fullscreen preview"
           >
+            <picture id="bouquet-picture">
+              <source
+                id="animation-source"
+                srcset="some_previews/bouquet_spin.gif"
+                media="not all"
+              >
+              <img
+                id="bouquet-image"
+                src="some_previews/bouquet_1.png"
+                alt="Classic Trio bouquet"
+              >
+            </picture>
+          </button>
         </div>
         <div class="card-caption" aria-live="polite">
           <h2 id="bouquet-name">Classic Trio</h2>
@@ -179,59 +281,116 @@
         <button type="button" data-bouquet="2" aria-pressed="false">Blush &amp; Ivory</button>
         <button type="button" data-bouquet="3" aria-pressed="false">Ivory Garden</button>
       </nav>
-      <button class="cycle-button" id="cycle-button" type="button" aria-pressed="false">
-        Start cycling
-      </button>
+      <div class="gallery-controls">
+        <button class="cycle-button" id="cycle-button" type="button" aria-pressed="false">
+          Start cycling
+        </button>
+        <button class="animation-button" id="animation-button" type="button" aria-pressed="true">
+          Pause animation
+        </button>
+      </div>
 
       <footer>Made to brighten your day <span aria-hidden="true">♥</span></footer>
     </main>
+
+    <dialog
+      class="preview-dialog"
+      id="preview-dialog"
+      aria-label="Fullscreen bouquet preview"
+    >
+      <button
+        class="close-preview"
+        id="close-preview"
+        type="button"
+        aria-label="Close fullscreen preview"
+        autofocus
+      >×</button>
+    </dialog>
 
     <script>
       const bouquets = [
         {
           name: "Classic Trio",
           mix: "4 light green tulips · 4 pink lilies · 4 white roses",
-          image: "some_previews/bouquet_spin.gif",
-          alt: "Classic Trio bouquet slowly spinning",
+          still: "some_previews/bouquet_1.png",
+          animated: "some_previews/bouquet_spin.gif",
+          alt: "Classic Trio bouquet",
         },
         {
           name: "Spring Meadow",
           mix: "6 light green tulips · 3 pink lilies · 3 white roses",
-          image: "some_previews/bouquet_2.png",
-          alt: "Spring Meadow bouquet with tulips, lilies, and roses",
+          still: "some_previews/bouquet_2.png",
+          animated: "some_previews/bouquet_2.gif",
+          alt: "Spring Meadow bouquet",
         },
         {
           name: "Blush & Ivory",
           mix: "2 light green tulips · 6 pink lilies · 4 white roses",
-          image: "some_previews/bouquet_3.png",
-          alt: "Blush and Ivory bouquet with pink lilies and white roses",
+          still: "some_previews/bouquet_3.png",
+          animated: "some_previews/bouquet_3.gif",
+          alt: "Blush and Ivory bouquet",
         },
         {
           name: "Ivory Garden",
           mix: "3 light green tulips · 3 pink lilies · 6 white roses",
-          image: "some_previews/bouquet_4.png",
-          alt: "Ivory Garden bouquet with white roses, tulips, and lilies",
+          still: "some_previews/bouquet_4.png",
+          animated: "some_previews/bouquet_4.gif",
+          alt: "Ivory Garden bouquet",
         },
       ];
 
+      const SPIN_CYCLE_MS = 10450;
+      const picture = document.querySelector("#bouquet-picture");
+      const animationSource = document.querySelector("#animation-source");
       const image = document.querySelector("#bouquet-image");
+      const previewTrigger = document.querySelector("#preview-trigger");
+      const previewDialog = document.querySelector("#preview-dialog");
+      const closePreview = document.querySelector("#close-preview");
       const name = document.querySelector("#bouquet-name");
       const mix = document.querySelector("#bouquet-mix");
       const buttons = [...document.querySelectorAll("[data-bouquet]")];
       const cycleButton = document.querySelector("#cycle-button");
+      const animationButton = document.querySelector("#animation-button");
+      const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
+      const connection = navigator.connection;
+      const dataSaverEnabled = Boolean(
+        connection &&
+          (connection.saveData ||
+            connection.effectiveType === "slow-2g" ||
+            connection.effectiveType === "2g"),
+      );
       let selected = 0;
+      let animationPlaying = !motionPreference.matches && !dataSaverEnabled;
       let cycleTimer;
+      let picturePlaceholder;
 
-      function selectBouquet(index) {
-        selected = index;
-        const bouquet = bouquets[index];
-        image.src = bouquet.image;
+      function renderSelectedBouquet() {
+        const bouquet = bouquets[selected];
+        animationSource.srcset = bouquet.animated;
+        animationSource.media = animationPlaying ? "all" : "not all";
+        image.src = bouquet.still;
         image.alt = bouquet.alt;
+        previewTrigger.setAttribute(
+          "aria-label",
+          `Open ${bouquet.name} in fullscreen preview`,
+        );
         name.textContent = bouquet.name;
         mix.textContent = bouquet.mix;
         buttons.forEach((button, buttonIndex) => {
-          button.setAttribute("aria-pressed", String(buttonIndex === index));
+          button.setAttribute("aria-pressed", String(buttonIndex === selected));
         });
+      }
+
+      function selectBouquet(index) {
+        selected = index;
+        renderSelectedBouquet();
+      }
+
+      function setAnimationPlaying(playing) {
+        animationPlaying = playing;
+        animationButton.setAttribute("aria-pressed", String(playing));
+        animationButton.textContent = playing ? "Pause animation" : "Play animation";
+        renderSelectedBouquet();
       }
 
       function stopCycling() {
@@ -241,12 +400,58 @@
         cycleButton.textContent = "Start cycling";
       }
 
+      previewTrigger.addEventListener("click", () => {
+        picturePlaceholder = document.createComment("");
+        picture.replaceWith(picturePlaceholder);
+        previewDialog.append(picture);
+        previewDialog.showModal();
+      });
+
+      closePreview.addEventListener("click", () => previewDialog.close());
+      previewDialog.addEventListener("close", () => {
+        picturePlaceholder.replaceWith(picture);
+        picturePlaceholder = undefined;
+      });
+      previewDialog.addEventListener("click", (event) => {
+        if (event.target === previewDialog) {
+          previewDialog.close();
+        }
+      });
+
       buttons.forEach((button) => {
         button.addEventListener("click", () => {
           stopCycling();
           selectBouquet(Number(button.dataset.bouquet));
         });
       });
+
+      animationButton.addEventListener("click", () => {
+        setAnimationPlaying(!animationPlaying);
+      });
+
+      const handleMotionPreferenceChange = (event) => {
+        if (event.matches) {
+          setAnimationPlaying(false);
+        }
+      };
+      if (motionPreference.addEventListener) {
+        motionPreference.addEventListener("change", handleMotionPreferenceChange);
+      } else {
+        motionPreference.addListener(handleMotionPreferenceChange);
+      }
+      if (connection && connection.addEventListener) {
+        connection.addEventListener("change", () => {
+          if (
+            connection.saveData ||
+            connection.effectiveType === "slow-2g" ||
+            connection.effectiveType === "2g"
+          ) {
+            setAnimationPlaying(false);
+          }
+        });
+      }
+
+      setAnimationPlaying(animationPlaying);
 
       cycleButton.addEventListener("click", () => {
         if (cycleTimer) {
@@ -258,7 +463,7 @@
         cycleButton.textContent = "Stop cycling";
         cycleTimer = window.setInterval(() => {
           selectBouquet((selected + 1) % bouquets.length);
-        }, 5000);
+        }, SPIN_CYCLE_MS);
       });
     </script>
   </body>

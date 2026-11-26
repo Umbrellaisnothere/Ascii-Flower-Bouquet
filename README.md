@@ -89,7 +89,7 @@ The layouts and render engine live in `bouquets.py` and `engine.py`. `bouquet3d.
 
 ## View in a browser
 
-Open `index.html` locally to view the bouquet gallery. It uses the preview images in `some_previews/` and needs no build step.
+Open `index.html` locally to view the bouquet gallery. It uses responsive previews, 20 FPS spinning animations, and play/pause controls. It respects reduced-motion and data-saver preferences by starting with a still image. Click the image for fullscreen (close with × or Escape). It needs no build step.
 
 To deploy it on Vercel, import this repository and deploy it as a static site using the repository root. No framework or build command is required.
 
@@ -123,7 +123,7 @@ Press `Ctrl+C` to stop.
 - `--cols N --rows N`: override terminal dimensions
 - `--speed RAD`: override spin speed (default `0.6`)
 - `--message TEXT`: customize the message under the bouquet
-- `--preview` / `--all-previews`: write PNG/GIF previews to `previews/` (requires [Pillow](https://pypi.org/project/pillow/), used only for image export)
+- `--preview` / `--all-previews`: write PNG and spinning GIF previews to `previews/` (requires [Pillow](https://pypi.org/project/pillow/), used only for image export)
 
 ## Tips
 

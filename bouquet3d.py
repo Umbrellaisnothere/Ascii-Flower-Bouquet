@@ -134,28 +134,38 @@ def _export_outputs(args):
             grid_to_image(chars, colors, font_size=14).save(png_path, "PNG")
             print(f"Saved {png_path}")
 
-            if bid == ids[0]:
-                imgs = []
-                n_gif = 30
-                for i in range(n_gif):
-                    t = i * (2 * math.pi / max(args.speed, 1e-6)) / n_gif
-                    h = seeded_hearts(seed=10 + bid)
-                    update_hearts(h, t)
-                    c_g, col_g = render_grid(
-                        scene, t, cols, rows, h,
-                        message=msg, hint=hint, bounds=bounds, spin_speed=args.speed,
-                    )
-                    imgs.append(grid_to_image(c_g, col_g, font_size=11))
-                gif_name = "bouquet_spin.gif" if args.all_previews else f"{stem}.gif"
-                gif_path = args.preview_dir / gif_name
-                imgs[0].save(
-                    gif_path,
-                    save_all=True,
-                    append_images=imgs[1:],
-                    duration=int(1000 / 12),
-                    loop=0,
+            imgs = []
+            cycle_seconds = 2 * math.pi / max(args.speed, 1e-6)
+            n_gif = min(600, max(2, round(cycle_seconds * 20)))
+            gif_duration = round(cycle_seconds * 1000 / n_gif / 10) * 10
+            gif_duration = min(655350, max(10, gif_duration))
+            for i in range(n_gif):
+                t = i * (2 * math.pi / max(args.speed, 1e-6)) / n_gif
+                h = seeded_hearts(seed=10 + bid)
+                update_hearts(h, t)
+                c_g, col_g = render_grid(
+                    scene, t, cols, rows, h,
+                    message=msg, hint=hint, bounds=bounds, spin_speed=args.speed,
                 )
-                print(f"Saved {gif_path}")
+                imgs.append(grid_to_image(c_g, col_g, font_size=11))
+            if args.all_previews:
+                gif_name = (
+                    "bouquet_spin.gif"
+                    if bid == ids[0]
+                    else f"bouquet_{spec['id']}.gif"
+                )
+            else:
+                gif_name = f"{stem}.gif"
+            gif_path = args.preview_dir / gif_name
+            imgs[0].save(
+                gif_path,
+                save_all=True,
+                append_images=imgs[1:],
+                duration=gif_duration,
+                loop=0,
+                optimize=True,
+            )
+            print(f"Saved {gif_path}")
 
 
 def main():
