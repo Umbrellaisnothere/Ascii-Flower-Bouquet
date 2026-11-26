@@ -23,6 +23,7 @@
 
       body {
         min-height: 100vh;
+        min-height: 100dvh;
         margin: 0;
         background:
           radial-gradient(ellipse at 50% 20%, #263c31 0, transparent 55%),
@@ -32,11 +33,12 @@
       main {
         width: min(100% - 2rem, 980px);
         margin: 0 auto;
-        padding: clamp(2.5rem, 8vw, 6rem) 0 3rem;
+        padding: clamp(2.5rem, 8vw, 6rem) 0 max(3rem, env(safe-area-inset-bottom));
         text-align: center;
       }
 
       .eyebrow {
+        margin: 0 0 0.75rem;
         color: #a9d8b2;
         font-size: 0.78rem;
         font-weight: 700;
@@ -45,7 +47,7 @@
       }
 
       h1 {
-        margin: 0.6rem 0;
+        margin: 0;
         font-family: Georgia, "Times New Roman", serif;
         font-size: clamp(2.5rem, 8vw, 5rem);
         font-weight: 500;
@@ -54,12 +56,13 @@
 
       .intro {
         max-width: 38rem;
-        margin: 0 auto;
+        margin: 0.75rem auto 0;
         color: #c2cec3;
         line-height: 1.7;
       }
 
       .bouquet-card {
+        width: 100%;
         margin: 2rem auto 1.5rem;
         overflow: hidden;
         border: 1px solid #ffffff20;
@@ -70,7 +73,7 @@
 
       .image-frame {
         display: grid;
-        min-height: 260px;
+        min-height: clamp(220px, 55vw, 420px);
         place-items: center;
         background:
           radial-gradient(ellipse at center, #294334 0, #101714 72%);
@@ -79,24 +82,27 @@
       .image-frame img {
         display: block;
         width: 100%;
-        height: auto;
-        max-height: min(70vh, 680px);
+        height: 100%;
+        max-height: min(68vh, 680px);
         object-fit: contain;
       }
 
       .image-frame picture {
         display: block;
         width: min(100%, 760px);
+        height: clamp(220px, 55vw, 420px);
       }
 
       .preview-trigger {
-        display: block;
+        display: grid;
         width: 100%;
-        min-height: 260px;
+        min-height: clamp(220px, 55vw, 420px);
         padding: 0;
         border: 0;
         border-radius: 0;
         background: transparent;
+        place-items: center;
+        cursor: zoom-in;
       }
 
       button.preview-trigger:hover {
@@ -104,24 +110,26 @@
         background: transparent;
       }
 
+      button.preview-trigger:focus-visible {
+        outline-offset: -4px;
+      }
+
       .preview-dialog {
-        position: relative;
-        width: 96vw;
-        max-width: 1400px;
-        width: min(96vw, 1400px);
-        height: 96vh;
-        max-height: 1000px;
-        height: min(96vh, 1000px);
-        height: min(96dvh, 1000px);
-        padding: 3.75rem 1rem 1rem;
+        position: fixed;
+        inset: 0;
+        width: auto;
+        height: auto;
+        max-width: none;
+        max-height: none;
+        margin: 0;
         padding:
-          max(3.75rem, env(safe-area-inset-top))
+          max(4.25rem, calc(env(safe-area-inset-top) + 3.25rem))
           max(1rem, env(safe-area-inset-right))
           max(1rem, env(safe-area-inset-bottom))
           max(1rem, env(safe-area-inset-left));
         overflow: hidden;
-        border: 1px solid #ffffff30;
-        border-radius: 1rem;
+        border: 0;
+        border-radius: 0;
         background: #080d0b;
         color: #f3f5ef;
       }
@@ -145,10 +153,8 @@
 
       .close-preview {
         position: absolute;
-        top: 0.65rem;
-        right: 0.65rem;
-        top: max(0.65rem, env(safe-area-inset-top));
-        right: max(0.65rem, env(safe-area-inset-right));
+        top: max(0.75rem, env(safe-area-inset-top));
+        right: max(0.75rem, env(safe-area-inset-right));
         z-index: 1;
         display: grid;
         width: 2.75rem;
@@ -186,6 +192,9 @@
       }
 
       button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         min-height: 2.75rem;
         padding: 0.65rem 1rem;
         border: 1px solid #829d87;
@@ -212,6 +221,7 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: 0.65rem;
+        padding: 0 0.25rem;
         margin-top: 0.35rem;
       }
 
@@ -233,6 +243,58 @@
         margin-top: 2.5rem;
         color: #9baa9d;
         font-size: 0.9rem;
+      }
+
+      @media (max-width: 480px) {
+        main {
+          width: min(100% - 1.25rem, 980px);
+          padding-top: 2rem;
+        }
+
+        h1 {
+          font-size: clamp(2rem, 10vw, 3rem);
+        }
+
+        .bouquet-card {
+          margin-top: 1.5rem;
+          border-radius: 1rem;
+        }
+
+        .image-frame,
+        .preview-trigger {
+          min-height: clamp(220px, 70vw, 320px);
+        }
+
+        .image-frame picture {
+          height: clamp(220px, 70vw, 320px);
+        }
+
+        .card-caption {
+          padding: 1rem;
+        }
+
+        .bouquet-picker {
+          gap: 0.5rem;
+        }
+
+        .bouquet-picker button {
+          flex: 1 1 calc(50% - 0.5rem);
+          padding-inline: 0.65rem;
+        }
+
+        .preview-dialog {
+          padding-top: max(3.75rem, calc(env(safe-area-inset-top) + 2.75rem));
+        }
+      }
+
+      @media (max-height: 480px) and (orientation: landscape) {
+        main {
+          padding-top: 1.5rem;
+        }
+
+        .preview-dialog {
+          padding-top: max(3.5rem, calc(env(safe-area-inset-top) + 2.5rem));
+        }
       }
     </style>
   </head>
