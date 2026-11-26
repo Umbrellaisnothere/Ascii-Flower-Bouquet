@@ -89,7 +89,7 @@ The layouts and render engine live in `bouquets.py` and `engine.py`. `bouquet3d.
 
 ## View in a browser
 
-Open `index.html` locally to view the bouquet gallery. It uses responsive previews, 20 FPS spinning animations, and play/pause controls. It respects reduced-motion and data-saver preferences by starting with a still image. Click the image for fullscreen (close with × or Escape). It needs no build step.
+Open `index.html` locally to view the bouquet gallery. It uses responsive previews, 20 FPS spinning animations, and play/pause controls. It respects reduced-motion and data-saver preferences by starting with a still image. Click the image for fullscreen (close with × or Escape); use the PNG/GIF links beside the close button to save the still image or animated version. It needs no build step.
 
 To deploy it on Vercel, import this repository and deploy it as a static site using the repository root. No framework or build command is required.
 
