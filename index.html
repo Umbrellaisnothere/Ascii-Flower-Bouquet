@@ -416,11 +416,6 @@
             aria-label="Open Classic Trio in fullscreen preview"
           >
             <picture id="bouquet-picture">
-              <source
-                id="animation-source"
-                srcset="some_previews/bouquet_spin.gif"
-                media="not all"
-              >
               <img
                 id="bouquet-image"
                 src="some_previews/bouquet_1.png"
@@ -459,8 +454,8 @@
         <button class="cycle-button" id="cycle-button" type="button" aria-pressed="false">
           Start cycling
         </button>
-        <button class="animation-button" id="animation-button" type="button" aria-pressed="true">
-          Pause animation
+        <button class="animation-button" id="animation-button" type="button" aria-pressed="false">
+          Animation stopped
         </button>
       </div>
 
@@ -561,7 +556,6 @@
 
       const SPIN_CYCLE_MS = 10450;
       const picture = document.querySelector("#bouquet-picture");
-      const animationSource = document.querySelector("#animation-source");
       const image = document.querySelector("#bouquet-image");
       const previewTrigger = document.querySelector("#preview-trigger");
       const previewDialog = document.querySelector("#preview-dialog");
@@ -592,9 +586,7 @@
           .toLowerCase()
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/^-|-$/g, "");
-        animationSource.srcset = bouquet.animated;
-        animationSource.media = animationPlaying ? "all" : "not all";
-        image.src = bouquet.still;
+        image.src = animationPlaying ? bouquet.animated : bouquet.still;
         image.alt = bouquet.alt;
         downloadImage.href = bouquet.still;
         downloadImage.download = `${fileStem}.png`;
@@ -619,7 +611,7 @@
       function setAnimationPlaying(playing) {
         animationPlaying = playing;
         animationButton.setAttribute("aria-pressed", String(playing));
-        animationButton.textContent = playing ? "Pause animation" : "Play animation";
+        animationButton.textContent = playing ? "Animation playing" : "Animation stopped";
         renderSelectedBouquet();
       }
 
